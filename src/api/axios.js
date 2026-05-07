@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
 });
-
 // Attach access token to every request
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
@@ -31,7 +30,7 @@ API.interceptors.response.use(
           // Call refresh endpoint with raw axios —
           // not API instance to avoid interceptor loop
           const { data } = await axios.post(
-            'http://localhost:5000/api/auth/refresh',
+            `${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/refresh`,
             { refreshToken }
           );
 
