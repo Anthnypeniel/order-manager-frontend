@@ -18,7 +18,6 @@ import {
   HiOutlineRefresh,
   HiOutlineExclamationCircle,
 } from "react-icons/hi";
-import { RiArrowUpSFill } from "react-icons/ri";
 
 // ── Tiny sparkline bar chart ──────────────────────────────────
 const SparkBar = ({ value, max, color }) => (

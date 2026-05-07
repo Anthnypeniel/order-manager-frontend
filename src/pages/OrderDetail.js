@@ -11,14 +11,9 @@ import {
   HiOutlineX,
   HiOutlinePhone,
   HiOutlineLocationMarker,
-  HiOutlineClipboardList,
   HiOutlineCurrencyDollar,
-  HiOutlineTruck,
-  HiOutlineClock,
-  HiOutlineCheckCircle,
-  HiOutlineExclamationCircle,
   HiOutlineRefresh,
-} from "react-icons/hi";
+} from 'react-icons/hi';
 import { IoCopyOutline } from "react-icons/io5";
 import { IoLogoWhatsapp } from "react-icons/io5";
 

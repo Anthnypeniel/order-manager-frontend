@@ -16,7 +16,6 @@ const Login = () => {
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [focused, setFocused] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -189,8 +188,7 @@ const Login = () => {
                     name="email"
                     value={form.email}
                     onChange={handleChange}
-                    onFocus={() => setFocused('email')}
-                    onBlur={() => setFocused('')}
+                
                     placeholder="you@example.com"
                     className="input"
                     autoComplete="email"
@@ -213,8 +211,6 @@ const Login = () => {
                     name="password"
                     value={form.password}
                     onChange={handleChange}
-                    onFocus={() => setFocused('password')}
-                    onBlur={() => setFocused('')}
                     placeholder="Enter your password"
                     className="input pr-12"
                     autoComplete="current-password"
