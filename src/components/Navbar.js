@@ -1,7 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { HiSun, HiMoon, HiMenu } from 'react-icons/hi';
-import { IoNotificationsOutline } from 'react-icons/io5';
+import NotificationCenter from './NotificationCenter';
 
 const Navbar = ({ onMenuClick }) => {
   const { user } = useAuth();
@@ -66,14 +66,7 @@ const Navbar = ({ onMenuClick }) => {
           </button>
 
           {/* Notifications */}
-          <button className={`relative p-2.5 rounded-xl transition-all duration-200 active:scale-95 ${
-            isDark
-              ? 'bg-gray-800/80 hover:bg-gray-700 text-gray-400'
-              : 'bg-gray-100 hover:bg-gray-200 text-gray-500'
-          }`}>
-            <IoNotificationsOutline className="w-[18px] h-[18px]" />
-            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-primary-500 rounded-full ring-2 ring-white dark:ring-gray-950" />
-          </button>
+            <NotificationCenter />
 
           {/* Divider */}
           <div className={`w-px h-6 mx-1 ${isDark ? 'bg-gray-800' : 'bg-gray-200'}`} />
