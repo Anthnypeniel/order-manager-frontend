@@ -12,6 +12,7 @@ import CreateOrder from './pages/CreateOrder';
 import OrderDetail from './pages/OrderDetail';
 import Upgrade from './pages/Upgrade';
 import PaymentVerify from './pages/PaymentVerify';
+import VerifyEmail from './pages/VerifyEmail';
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               <Route path="/payment/verify" element={
                 <ProtectedRoute><PaymentVerify /></ProtectedRoute>
               } />
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Router>

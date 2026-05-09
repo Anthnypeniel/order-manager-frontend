@@ -78,8 +78,8 @@ const Register = () => {
         data.token,
         data.refreshToken
       );
-      toast.success(`Account created! Welcome, ${data.name.split(" ")[0]}! 🚀`);
-      navigate("/");
+      toast.success('Check your email for a verification code!');
+      navigate('/verify-email', { state: { email: form.email } });
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
     } finally {

@@ -1,3 +1,4 @@
+import { usePlan } from "../context/PlanContext";
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
@@ -152,6 +153,9 @@ const CreateOrder = () => {
   const [source, setSource] = useState("whatsapp");
 
   const [submitting, setSubmitting] = useState(false);
+  // We check plan here — not in the API call —
+  // so vendor sees upgrade prompt immediately, not a confusing error
+  const { plan, refreshPlan } = usePlan();
 
   // ── Item mutations ────────────────────────────────────────
   const addItem = () => {
@@ -217,9 +221,16 @@ const CreateOrder = () => {
 
   // ── Submission ────────────────────────────────────────────
   const handleSubmit = async () => {
-    if (!validate()) return;
-    setSubmitting(true);
+    // Check free tier FIRST — before validation, before API call.
+    // This gives vendor immediate clear feedback instead of
+    // waiting for an API error they won't understand.
+    if (plan && !plan.isPremium && plan.ordersRemaining <= 0) {
+      toast.error("You have reached your free plan limit");
+      navigate("/upgrade");
+      return;
+    }
 
+    if (!validate()) return;
     try {
       const payload = {
         customer: {
@@ -242,10 +253,41 @@ const CreateOrder = () => {
         source,
       };
 
-      const { data } = await API.post("/orders", payload);
+      // Retry up to 3 times — handles server wake-up on Render free tier.
+      // We only retry on server errors (5xx), never on business logic errors
+      // (4xx) like "free limit reached" or "validation failed".
+      // This distinction is critical — we don't want to retry a 403.
+      let lastError;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          const { data } = await API.post("/orders", payload);
+          toast.dismiss("retry-toast");
+          toast.success(`Order ${data.data.orderNumber} created!`);
+          refreshPlan(); // update the sidebar order count
+          navigate(`/orders/${data.data._id}`);
+          return; // success — exit function immediately
+        } catch (err) {
+          lastError = err;
+          const status = err.response?.status;
 
-      toast.success(`Order ${data.data.orderNumber} created!`);
-      navigate(`/orders/${data.data._id}`);
+          // 4xx errors are business logic — don't retry
+          if (status && status >= 400 && status < 500) break;
+
+          // 5xx or network error — server might be waking up
+          if (attempt < 3) {
+            toast.loading(`Connecting to server... (${attempt}/3)`, {
+              id: "retry-toast",
+            });
+            // Wait 2 seconds before retrying
+            await new Promise((r) => setTimeout(r, 2000));
+          }
+        }
+      }
+
+      toast.dismiss("retry-toast");
+      const msg =
+        lastError?.response?.data?.message || "Failed to create order";
+      toast.error(msg);
     } catch (err) {
       const msg = err.response?.data?.message || "Failed to create order";
       toast.error(msg);
@@ -380,47 +422,52 @@ const CreateOrder = () => {
             isDark={isDark}
           >
             <div className="space-y-3">
-              {/* Column Headers */}
-              <div
-                className={`grid grid-cols-12 gap-2 pb-1 text-[10px] font-bold uppercase tracking-widest ${
-                  isDark ? "text-gray-600" : "text-gray-400"
-                }`}
-              >
-                <div className="col-span-5">Item Name</div>
-                <div className="col-span-2 text-center">Qty</div>
-                <div className="col-span-3">Price (₦)</div>
-                <div className="col-span-2 text-right">Subtotal</div>
-              </div>
-
               {/* Item Rows */}
               {items.map((item, index) => {
-                const subtotal =
-                  (parseInt(item.quantity) || 0) *
-                  (parseFloat(item.price) || 0);
-                return (
-                  <div
-                    key={item.id}
-                    className={`grid grid-cols-12 gap-2 items-center p-3 rounded-xl border transition-all duration-200 ${
-                      isDark
-                        ? "border-gray-800 bg-gray-800/30"
-                        : "border-gray-100 bg-gray-50/60"
-                    }`}
-                  >
-                    {/* Name */}
-                    <div className="col-span-5">
-                      <input
-                        type="text"
-                        value={item.name}
-                        onChange={(e) =>
-                          updateItem(item.id, "name", e.target.value)
-                        }
-                        placeholder={`Item ${index + 1}`}
-                        className="input text-sm py-2 px-3"
-                      />
-                    </div>
+              const subtotal =
+                (parseInt(item.quantity) || 0) *
+                (parseFloat(item.price) || 0);
+              return (
+                <div
+                  key={item.id}
+                  className={`p-3 rounded-xl border transition-all duration-200 ${
+                    isDark
+                      ? "border-gray-800 bg-gray-800/30"
+                      : "border-gray-100 bg-gray-50/60"
+                  }`}
+                >
+                  {/* Item name + delete button — full width on all screens */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={item.name}
+                      onChange={(e) =>
+                        updateItem(item.id, "name", e.target.value)
+                      }
+                      placeholder={`Item ${index + 1}`}
+                      className="input text-sm py-2 px-3 flex-1"
+                    />
+                    <button
+                      onClick={() => removeItem(item.id)}
+                      className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                        isDark
+                          ? "text-gray-700 hover:text-red-400 hover:bg-red-500/10"
+                          : "text-gray-300 hover:text-red-500 hover:bg-red-50"
+                      }`}
+                    >
+                      <HiOutlineTrash className="w-4 h-4" />
+                    </button>
+                  </div>
 
+                  {/* Qty + Price + Subtotal — side by side, never overlapping */}
+                  <div className="flex items-end gap-2">
                     {/* Quantity */}
-                    <div className="col-span-2">
+                    <div className="w-20 flex-shrink-0">
+                      <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${
+                        isDark ? "text-gray-600" : "text-gray-400"
+                      }`}>
+                        Qty
+                      </p>
                       <input
                         type="number"
                         value={item.quantity}
@@ -433,7 +480,12 @@ const CreateOrder = () => {
                     </div>
 
                     {/* Price */}
-                    <div className="col-span-3">
+                    <div className="flex-1">
+                      <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${
+                        isDark ? "text-gray-600" : "text-gray-400"
+                      }`}>
+                        Price (₦)
+                      </p>
                       <input
                         type="number"
                         value={item.price}
@@ -446,35 +498,27 @@ const CreateOrder = () => {
                       />
                     </div>
 
-                    {/* Subtotal + Delete */}
-                    <div className="col-span-2 flex items-center justify-end gap-1.5">
-                      <span
-                        className={`text-xs font-bold ${
-                          subtotal > 0
-                            ? isDark
-                              ? "text-white"
-                              : "text-gray-900"
-                            : isDark
-                              ? "text-gray-700"
-                              : "text-gray-300"
-                        }`}
-                      >
-                        {subtotal > 0 ? `₦${subtotal.toLocaleString()}` : "—"}
-                      </span>
-                      <button
-                        onClick={() => removeItem(item.id)}
-                        className={`p-1 rounded-lg transition-colors flex-shrink-0 ${
-                          isDark
-                            ? "text-gray-700 hover:text-red-400 hover:bg-red-500/10"
-                            : "text-gray-300 hover:text-red-500 hover:bg-red-50"
-                        }`}
-                      >
-                        <HiOutlineTrash className="w-3.5 h-3.5" />
-                      </button>
+                    {/* Subtotal — display only, never an input */}
+                    <div className="w-24 flex-shrink-0 text-right pb-2">
+                      <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${
+                        isDark ? "text-gray-600" : "text-gray-400"
+                      }`}>
+                        Total
+                      </p>
+                      <p className={`text-sm font-bold ${
+                        subtotal > 0
+                          ? isDark ? "text-white" : "text-gray-900"
+                          : isDark ? "text-gray-700" : "text-gray-300"
+                      }`}>
+                        {subtotal > 0
+                          ? `₦${subtotal.toLocaleString()}`
+                          : "—"}
+                      </p>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              );
+            })}
 
               {/* Add Item */}
               <button

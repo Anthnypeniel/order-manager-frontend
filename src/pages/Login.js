@@ -38,7 +38,14 @@ const Login = () => {
       toast.success(`Welcome back, ${data.name.split(' ')[0]}! `);
       navigate('/');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+      const data = err.response?.data;
+      // If unverified — redirect to verify page instead of showing error
+      if (data?.requiresVerification) {
+        toast.error('Please verify your email first');
+        navigate('/verify-email', { state: { email: form.email } });
+        return;
+      }
+      toast.error(data?.message || 'Login failed');
     } finally {
       setLoading(false);
     }
