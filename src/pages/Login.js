@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -7,11 +7,21 @@ import { IoStorefrontOutline, IoEyeOutline, IoEyeOffOutline } from 'react-icons/
 import { HiArrowRight } from 'react-icons/hi';
 import API from '../api/axios';
 import toast from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 
 const Login = () => {
   const { login } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Pre-fill email if coming from verification page
+  useEffect(() => {
+    if (location.state?.verifiedEmail) {
+      setForm(prev => ({ ...prev, email: location.state.verifiedEmail }));
+      toast.success(location.state.message || 'Email verified! Please login.');
+    }
+  }, []);
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);

@@ -71,26 +71,30 @@ const VerifyEmail = () => {
     }
   };
 
-  const handleVerify = async (codeString) => {
+ const handleVerify = async (codeString) => {
     if (loading) return;
     setLoading(true);
     try {
-      const { data } = await API.post("/auth/verify-email", {
+      await API.post("/auth/verify-email", {
         email,
         code: codeString,
       });
 
-      login(
-        { _id: data._id, name: data.name, email: data.email },
-        data.token,
-        data.refreshToken
-      );
-
-      toast.success(`Welcome to OrderManager, ${data.name.split(" ")[0]}! 🎉`);
-      navigate("/");
+      // Don't auto-login after verification —
+      // vendor must login manually. This is intentional:
+      // 1. More secure — vendor confirms their credentials
+      // 2. Works across devices — vendor might verify on
+      //    phone but want to login on laptop
+      // 3. Clear separation between signup and login flows
+      toast.success("Email verified! Please login to continue.");
+      navigate("/login", {
+        state: {
+          verifiedEmail: email,
+          message: "Email verified successfully! Please login."
+        }
+      });
     } catch (err) {
       toast.error(err.response?.data?.message || "Invalid code");
-      // Clear and refocus on error — vendor can retry immediately
       setCode(["", "", "", "", "", ""]);
       setTimeout(() => inputs.current[0]?.focus(), 100);
     } finally {
