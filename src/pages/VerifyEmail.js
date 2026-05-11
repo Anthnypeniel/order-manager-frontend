@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { HiArrowRight } from "react-icons/hi";
@@ -9,7 +8,6 @@ import toast from "react-hot-toast";
 
 const VerifyEmail = () => {
   const { isDark } = useTheme();
-  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 

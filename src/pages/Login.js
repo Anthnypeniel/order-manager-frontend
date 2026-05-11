@@ -21,7 +21,7 @@ const Login = () => {
       setForm(prev => ({ ...prev, email: location.state.verifiedEmail }));
       toast.success(location.state.message || 'Email verified! Please login.');
     }
-  }, []);
+  }, [location.state?.verifiedEmail, location.state?.message]);
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
