@@ -5,6 +5,15 @@
 @tailwind utilities;
 
 @layer base {
+
+  /* Prevent iOS zoom on input focus — iOS zooms when
+     font-size is below 16px. Setting font-size on all
+     inputs ensures this never happens regardless of
+     individual component styles */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
   * {
     transition: background-color 0.2s, border-color 0.2s, color 0.2s;
   }
