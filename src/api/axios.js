@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  headers: {
+    // Prevent iOS Safari caching API requests
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+  }
 });
 // Attach access token to every request
 API.interceptors.request.use((config) => {
