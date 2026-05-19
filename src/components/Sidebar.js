@@ -65,7 +65,7 @@ if (!plan || plan.isPremium || plan.plan === 'premium') return null;
         {plan.ordersRemaining > 0
           ? `${plan.ordersRemaining} free order${plan.ordersRemaining !== 1 ? 's' : ''} left`
           : 'Free limit reached'
-        } · ₦5,000/mo
+        } · ₦3,000/mo
       </p>
     </div>
   );

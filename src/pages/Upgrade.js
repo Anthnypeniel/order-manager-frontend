@@ -375,7 +375,7 @@ const Upgrade = () => {
                 <div className={`flex items-center gap-2 p-3 rounded-xl mb-4 ${
                   isDark ? 'bg-primary-500/10' : 'bg-primary-50'
                 }`}>
-                  <span className="text-lg">🎁</span>
+                  <span className="text-lg"></span>
                   <div>
                     <p className="text-xs font-bold text-primary-500">
                       You save ₦3,000
@@ -468,7 +468,7 @@ const Upgrade = () => {
                 <span className={`text-[10px] flex items-center gap-1 ${
                   isDark ? 'text-gray-600' : 'text-gray-400'
                 }`}>
-                  🔒 Secured by Paystack
+                   Secured by Paystack
                 </span>
                 <span className={`text-[10px] ${isDark ? 'text-gray-700' : 'text-gray-300'}`}>•</span>
                 <span className={`text-[10px] ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
