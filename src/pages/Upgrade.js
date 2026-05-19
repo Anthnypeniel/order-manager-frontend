@@ -94,17 +94,17 @@ const PriceDisplay = ({ cycle, isDark }) => {
       {isAnnual && (
         <div className="flex items-center justify-center gap-2 mb-2">
           <span className={`text-sm line-through ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>
-            ₦60,000/yr
+            <s>₦36,000/yr</s>
           </span>
           <span className="text-xs font-bold text-primary-500 bg-primary-500/10 px-2 py-0.5 rounded-full">
-            Save ₦3,000
+            Save ₦2,750
           </span>
         </div>
       )}
 
       <div className="flex items-baseline justify-center gap-1">
-        <span className={`text-5xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          ₦{isAnnual ? '57,000' : '5,000'}
+        <span className={`text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          ₦{isAnnual ? '33,500' : '3,000'}
         </span>
         <span className={`text-sm ml-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
           /{isAnnual ? 'year' : 'month'}
@@ -113,7 +113,7 @@ const PriceDisplay = ({ cycle, isDark }) => {
 
       {isAnnual ? (
         <p className="text-xs text-primary-500 font-semibold mt-1.5">
-          ₦4,750/month · billed annually
+          ₦2,792/month · billed annually
         </p>
       ) : (
         <p className={`text-xs mt-1.5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
@@ -158,7 +158,7 @@ const Upgrade = () => {
           <HiOutlineCheckCircle className="w-10 h-10 text-primary-500" />
         </div>
         <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-          You're on Premium 🎉
+          You're on Premium 
         </h1>
         <p className={`text-sm mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
           {isAnnual ? 'Annual' : 'Monthly'} plan · Active until{' '}
@@ -218,7 +218,7 @@ const Upgrade = () => {
         />
         {billingCycle === 'annual' && (
           <p className={`text-xs mt-3 font-medium ${isDark ? 'text-primary-400' : 'text-primary-600'}`}>
-             You save ₦3,000 by paying annually
+             You save ₦2,500 by paying annually
           </p>
         )}
       </div>
@@ -439,7 +439,7 @@ const Upgrade = () => {
                 ) : (
                   <>
                     <HiOutlineLockClosed className="w-4 h-4" />
-                    Pay ₦{billingCycle === 'annual' ? '57,000' : '5,000'} securely
+                    Pay ₦{billingCycle === 'annual' ? '33,500' : '3,000'} securely
                   </>
                 )}
               </button>
