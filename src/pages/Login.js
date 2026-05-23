@@ -217,7 +217,9 @@ const Login = () => {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="label mb-0">Password</label>
-                  <button type="button"
+                  <button
+                    type="button"
+                    onClick={() => navigate('/forgot-password')}
                     className="text-xs font-semibold text-primary-500 hover:text-primary-600 transition-colors">
                     Forgot password?
                   </button>
