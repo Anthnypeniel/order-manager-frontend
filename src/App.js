@@ -20,6 +20,8 @@ import PaymentVerify from "./pages/PaymentVerify";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Customers from "./pages/Customers";
+import CustomerDetail from "./pages/CustomerDetail";
 
 function App() {
   return (
@@ -82,6 +84,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <PaymentVerify />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/customers"
+                element={
+                  <ProtectedRoute>
+                    <Customers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/customers/:phone"
+                element={
+                  <ProtectedRoute>
+                    <CustomerDetail />
                   </ProtectedRoute>
                 }
               />

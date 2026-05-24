@@ -1,9 +1,10 @@
 import { usePlan } from "../context/PlanContext";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import API from "../api/axios";
 import toast from "react-hot-toast";
+import { useLocation } from 'react-router-dom';
 import {
   HiOutlineArrowLeft,
   HiOutlinePlus,
@@ -129,6 +130,16 @@ const newItem = () => ({
 const CreateOrder = () => {
   const { isDark } = useTheme();
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  // Pre-fill customer info if coming from Customers page
+  useEffect(() => {
+    if (location.state?.prefill) {
+      const { name, phone, address } = location.state.prefill;
+      setCustomer({ name: name || '', phone: phone || '', address: address || '' });
+    }
+  }, []);
 
   // Customer info
   const [customer, setCustomer] = useState({
