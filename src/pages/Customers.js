@@ -7,10 +7,7 @@ import {
   HiOutlineX,
   HiOutlinePlus,
   HiOutlinePhone,
-  HiOutlineLocationMarker,
   HiOutlineShoppingBag,
-  HiOutlineCurrencyDollar,
-  HiOutlineArrowRight,
   HiOutlineRefresh,
   HiOutlineChevronLeft,
   HiOutlineChevronRight,
@@ -51,19 +48,25 @@ const CustomerCard = ({ customer, isDark, onClick, onNewOrder }) => {
             <div
               className="w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
               style={{
-                background: `hsl(${(customer.name?.charCodeAt(0) || 65) * 5}, 55%, 42%)`
+                background: `hsl(${(customer.name?.charCodeAt(0) || 65) * 5}, 55%, 42%)`,
               }}
             >
               {customer.name?.charAt(0).toUpperCase()}
             </div>
             <div>
-              <p className={`text-sm font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+              <p
+                className={`text-sm font-bold ${isDark ? "text-white" : "text-gray-900"}`}
+              >
                 {customer.name}
               </p>
               {customer.phone && (
                 <div className="flex items-center gap-1 mt-0.5">
-                  <HiOutlinePhone className={`w-3 h-3 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
-                  <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                  <HiOutlinePhone
+                    className={`w-3 h-3 ${isDark ? "text-gray-600" : "text-gray-400"}`}
+                  />
+                  <p
+                    className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}
+                  >
                     {customer.phone}
                   </p>
                 </div>
@@ -80,23 +83,31 @@ const CustomerCard = ({ customer, isDark, onClick, onNewOrder }) => {
         </div>
 
         {/* Stats row */}
-        <div className={`grid grid-cols-3 gap-3 p-3 rounded-xl mb-4 ${
-          isDark ? "bg-gray-800/50" : "bg-gray-50"
-        }`}>
+        <div
+          className={`grid grid-cols-3 gap-3 p-3 rounded-xl mb-4 ${
+            isDark ? "bg-gray-800/50" : "bg-gray-50"
+          }`}
+        >
           <div className="text-center">
-            <p className={`text-[10px] font-bold uppercase tracking-wider ${
-              isDark ? "text-gray-600" : "text-gray-400"
-            }`}>
+            <p
+              className={`text-[10px] font-bold uppercase tracking-wider ${
+                isDark ? "text-gray-600" : "text-gray-400"
+              }`}
+            >
               Orders
             </p>
-            <p className={`text-sm font-bold mt-0.5 ${isDark ? "text-white" : "text-gray-900"}`}>
+            <p
+              className={`text-sm font-bold mt-0.5 ${isDark ? "text-white" : "text-gray-900"}`}
+            >
               {customer.totalOrders}
             </p>
           </div>
-          <div className="text-center border-x ${isDark ? 'border-gray-700' : 'border-gray-200'}">
-            <p className={`text-[10px] font-bold uppercase tracking-wider ${
-              isDark ? "text-gray-600" : "text-gray-400"
-            }`}>
+          <div className={`text-center border-x ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <p
+              className={`text-[10px] font-bold uppercase tracking-wider ${
+                isDark ? "text-gray-600" : "text-gray-400"
+              }`} 
+            >
               Spent
             </p>
             <p className="text-sm font-bold mt-0.5 text-primary-500">
@@ -104,14 +115,20 @@ const CustomerCard = ({ customer, isDark, onClick, onNewOrder }) => {
             </p>
           </div>
           <div className="text-center">
-            <p className={`text-[10px] font-bold uppercase tracking-wider ${
-              isDark ? "text-gray-600" : "text-gray-400"
-            }`}>
+            <p
+              className={`text-[10px] font-bold uppercase tracking-wider ${
+                isDark ? "text-gray-600" : "text-gray-400"
+              }`}
+            >
               Paid
             </p>
-            <p className={`text-sm font-bold mt-0.5 ${
-              customer.totalBalance > 0 ? "text-amber-500" : "text-emerald-500"
-            }`}>
+            <p
+              className={`text-sm font-bold mt-0.5 ${
+                customer.totalBalance > 0
+                  ? "text-amber-500"
+                  : "text-emerald-500"
+              }`}
+            >
               ₦{customer.totalPaid.toLocaleString()}
             </p>
           </div>
@@ -120,13 +137,20 @@ const CustomerCard = ({ customer, isDark, onClick, onNewOrder }) => {
         {/* Footer */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <HiOutlineClock className={`w-3.5 h-3.5 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
-            <p className={`text-[11px] ${isDark ? "text-gray-600" : "text-gray-400"}`}>
+            <HiOutlineClock
+              className={`w-3.5 h-3.5 ${isDark ? "text-gray-600" : "text-gray-400"}`}
+            />
+            <p
+              className={`text-[11px] ${isDark ? "text-gray-600" : "text-gray-400"}`}
+            >
               Last order {timeAgo(customer.lastOrderDate)}
             </p>
           </div>
           <button
-            onClick={e => { e.stopPropagation(); onNewOrder(customer); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onNewOrder(customer);
+            }}
             className="flex items-center gap-1 text-[11px] font-semibold text-primary-500 hover:text-primary-600 transition-colors"
           >
             <HiOutlinePlus className="w-3.5 h-3.5" />
@@ -140,40 +164,61 @@ const CustomerCard = ({ customer, isDark, onClick, onNewOrder }) => {
 
 // ── Skeleton Card ─────────────────────────────────────────────
 const SkeletonCard = ({ isDark }) => (
-  <div className={`rounded-2xl border p-5 animate-pulse ${
-    isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
-  }`}>
+  <div
+    className={`rounded-2xl border p-5 animate-pulse ${
+      isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
+    }`}
+  >
     <div className="flex items-center gap-3 mb-4">
-      <div className={`w-11 h-11 rounded-xl ${isDark ? "bg-gray-800" : "bg-gray-100"}`} />
+      <div
+        className={`w-11 h-11 rounded-xl ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+      />
       <div className="space-y-2">
-        <div className={`h-3.5 w-28 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`} />
-        <div className={`h-3 w-20 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`} />
+        <div
+          className={`h-3.5 w-28 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+        />
+        <div
+          className={`h-3 w-20 rounded ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+        />
       </div>
     </div>
-    <div className={`h-16 rounded-xl ${isDark ? "bg-gray-800" : "bg-gray-100"}`} />
+    <div
+      className={`h-16 rounded-xl ${isDark ? "bg-gray-800" : "bg-gray-100"}`}
+    />
   </div>
 );
 
 // ── Empty State ───────────────────────────────────────────────
 const EmptyState = ({ isDark, hasSearch, onClear }) => (
   <div className="col-span-full flex flex-col items-center justify-center py-20">
-    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${
-      isDark ? "bg-gray-800" : "bg-gray-50"
-    }`}>
-      <HiOutlineShoppingBag className={`w-7 h-7 ${isDark ? "text-gray-600" : "text-gray-300"}`} />
+    <div
+      className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 ${
+        isDark ? "bg-gray-800" : "bg-gray-50"
+      }`}
+    >
+      <HiOutlineShoppingBag
+        className={`w-7 h-7 ${isDark ? "text-gray-600" : "text-gray-300"}`}
+      />
     </div>
-    <p className={`text-sm font-semibold ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+    <p
+      className={`text-sm font-semibold ${isDark ? "text-gray-300" : "text-gray-700"}`}
+    >
       {hasSearch ? "No customers match your search" : "No customers yet"}
     </p>
-    <p className={`text-xs mt-1.5 text-center max-w-xs leading-relaxed ${
-      isDark ? "text-gray-600" : "text-gray-400"
-    }`}>
+    <p
+      className={`text-xs mt-1.5 text-center max-w-xs leading-relaxed ${
+        isDark ? "text-gray-600" : "text-gray-400"
+      }`}
+    >
       {hasSearch
         ? "Try a different name or phone number"
         : "Customers appear here automatically when you create orders"}
     </p>
     {hasSearch && (
-      <button onClick={onClear} className="btn-secondary text-xs px-4 py-2 mt-4">
+      <button
+        onClick={onClear}
+        className="btn-secondary text-xs px-4 py-2 mt-4"
+      >
         Clear search
       </button>
     )}
@@ -203,28 +248,33 @@ const Customers = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const fetchCustomers = useCallback(async (isRefresh = false) => {
-    if (isRefresh) setRefreshing(true);
-    else setLoading(true);
+  const fetchCustomers = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) setRefreshing(true);
+      else setLoading(true);
 
-    try {
-      const params = new URLSearchParams();
-      params.append("page", page);
-      params.append("limit", 12);
-      if (debouncedSearch) params.append("search", debouncedSearch);
+      try {
+        const params = new URLSearchParams();
+        params.append("page", page);
+        params.append("limit", 12);
+        if (debouncedSearch) params.append("search", debouncedSearch);
 
-      const { data } = await API.get(`/customers?${params.toString()}`);
-      setCustomers(data.data);
-      setPagination(data.pagination);
-    } catch {
-      // Silent fail — don't crash the page
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [page, debouncedSearch]);
+        const { data } = await API.get(`/customers?${params.toString()}`);
+        setCustomers(data.data);
+        setPagination(data.pagination);
+      } catch {
+        // Silent fail — don't crash the page
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [page, debouncedSearch],
+  );
 
-  useEffect(() => { fetchCustomers(); }, [fetchCustomers]);
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const handleNewOrder = (customer) => {
     // Pre-fill customer info when creating new order
@@ -234,8 +284,8 @@ const Customers = () => {
           name: customer.name,
           phone: customer.phone || "",
           address: customer.address || "",
-        }
-      }
+        },
+      },
     });
   };
 
@@ -246,18 +296,20 @@ const Customers = () => {
 
   return (
     <div className="space-y-6 animate-fade-in pb-8">
-
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
+          <h1
+            className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}
+          >
             Customers
           </h1>
-          <p className={`text-sm mt-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+          <p
+            className={`text-sm mt-1 ${isDark ? "text-gray-500" : "text-gray-400"}`}
+          >
             {pagination.total > 0
               ? `${pagination.total} customer${pagination.total !== 1 ? "s" : ""} from your order history`
-              : "All your customers in one place"
-            }
+              : "All your customers in one place"}
           </p>
         </div>
         <button
@@ -269,23 +321,29 @@ const Customers = () => {
               : "bg-white border-gray-200 hover:bg-gray-50 text-gray-500"
           }`}
         >
-          <HiOutlineRefresh className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`} />
+          <HiOutlineRefresh
+            className={`w-4 h-4 ${refreshing ? "animate-spin" : ""}`}
+          />
         </button>
       </div>
 
       {/* Search */}
-      <div className={`rounded-2xl border p-4 ${
-        isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
-      }`}>
+      <div
+        className={`rounded-2xl border p-4 ${
+          isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
+        }`}
+      >
         <div className="relative">
-          <HiOutlineSearch className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${
-            isDark ? "text-gray-500" : "text-gray-400"
-          }`} />
+          <HiOutlineSearch
+            className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${
+              isDark ? "text-gray-500" : "text-gray-400"
+            }`}
+          />
           <input
             ref={searchRef}
             type="text"
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or phone number..."
             className="input pl-10 pr-10 h-10 text-sm"
           />
@@ -293,7 +351,9 @@ const Customers = () => {
             <button
               onClick={() => setSearch("")}
               className={`absolute right-3 top-1/2 -translate-y-1/2 ${
-                isDark ? "text-gray-500 hover:text-gray-300" : "text-gray-400 hover:text-gray-600"
+                isDark
+                  ? "text-gray-500 hover:text-gray-300"
+                  : "text-gray-400 hover:text-gray-600"
               }`}
             >
               <HiOutlineX className="w-3.5 h-3.5" />
@@ -313,7 +373,7 @@ const Customers = () => {
             onClear={() => setSearch("")}
           />
         ) : (
-          customers.map(customer => (
+          customers.map((customer) => (
             <CustomerCard
               key={customer._id}
               customer={customer}
@@ -327,15 +387,20 @@ const Customers = () => {
 
       {/* Pagination */}
       {pagination.pages > 1 && (
-        <div className={`flex items-center justify-between px-5 py-4 rounded-2xl border ${
-          isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
-        }`}>
-          <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-            Page {pagination.page} of {pagination.pages} · {pagination.total} customers
+        <div
+          className={`flex items-center justify-between px-5 py-4 rounded-2xl border ${
+            isDark ? "bg-gray-900 border-gray-800" : "bg-white border-gray-100"
+          }`}
+        >
+          <p
+            className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}
+          >
+            Page {pagination.page} of {pagination.pages} · {pagination.total}{" "}
+            customers
           </p>
           <div className="flex items-center gap-1.5">
             <button
-              onClick={() => setPage(p => Math.max(1, p - 1))}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className={`p-2 rounded-lg border transition-all disabled:opacity-40 ${
                 isDark
@@ -346,7 +411,7 @@ const Customers = () => {
               <HiOutlineChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setPage(p => Math.min(pagination.pages, p + 1))}
+              onClick={() => setPage((p) => Math.min(pagination.pages, p + 1))}
               disabled={page === pagination.pages}
               className={`p-2 rounded-lg border transition-all disabled:opacity-40 ${
                 isDark
