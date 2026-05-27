@@ -134,12 +134,16 @@ const CreateOrder = () => {
   const location = useLocation();
 
   // Pre-fill customer info if coming from Customers page
+const prefill = location.state?.prefill;
   useEffect(() => {
-    if (location.state?.prefill) {
-      const { name, phone, address } = location.state.prefill;
-      setCustomer({ name: name || '', phone: phone || '', address: address || '' });
+    if (prefill) {
+      setCustomer({
+        name: prefill.name || '',
+        phone: prefill.phone || '',
+        address: prefill.address || '',
+      });
     }
-  }, []);
+  }, [prefill]);
 
   // Customer info
   const [customer, setCustomer] = useState({
