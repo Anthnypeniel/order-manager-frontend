@@ -683,7 +683,7 @@ const OrderDetail = () => {
     // Single \n collapses into a space on some devices.
     const lines = [];
 
-    lines.push(`Hello *${order.customer?.name}* 👋`);
+    lines.push(`Hello *${order.customer?.name}* `);
     lines.push(`Thank you for your order! Here's your summary:`);
     lines.push("");
 
@@ -694,7 +694,7 @@ const OrderDetail = () => {
 
     lines.push(` *Order No:* ${order.orderNumber}`);
     lines.push(
-      `${statusIcon} *Status:* ${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}`,
+      ` *Status:* ${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}`,
     );
     lines.push(
       ` *Delivery:* ${order.deliveryType === "delivery" ? "Home Delivery" : "Pickup"}`,
@@ -722,7 +722,7 @@ const OrderDetail = () => {
     lines.push(`*TOTAL:         ₦${order.totalAmount?.toLocaleString()}*`);
     lines.push("");
     lines.push(
-      `${paymentIcon} *Payment Status:* ${order.paymentStatus?.charAt(0).toUpperCase() + order.paymentStatus?.slice(1)}`,
+      ` *Payment Status:* ${order.paymentStatus?.charAt(0).toUpperCase() + order.paymentStatus?.slice(1)}`,
     );
 
     if (order.amountPaid > 0 && order.paymentStatus !== "paid") {
