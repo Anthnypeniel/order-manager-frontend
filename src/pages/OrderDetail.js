@@ -655,21 +655,6 @@ const OrderDetail = () => {
   // Vendors send this to customers directly, so it must read
   // naturally, not like a system-generated receipt.
   const shareOnWhatsApp = () => {
-    const paymentIcon =
-      {
-        paid: "✅",
-        partial: "⏳",
-        unpaid: "🔴",
-      }[order.paymentStatus] || "🔴";
-
-    const statusIcon =
-      {
-        pending: "🕐",
-        confirmed: "✅",
-        processing: "🔄",
-        completed: "🎉",
-        cancelled: "❌",
-      }[order.status] || "🕐";
 
     const itemsList = order.items
       ?.map(
